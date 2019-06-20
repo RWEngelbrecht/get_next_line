@@ -1,22 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_toupper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rengelbr <rengelbr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/06/10 16:05:56 by rengelbr          #+#    #+#             */
-/*   Updated: 2019/06/17 13:49:33 by rengelbr         ###   ########.fr       */
+/*   Created: 2019/05/30 10:08:52 by rengelbr          #+#    #+#             */
+/*   Updated: 2019/06/03 16:51:29 by rengelbr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# define BUFF_SIZE 10
+#include "libft.h"
 
-# include <unistd.h>
-# include "libft/libft.h"
-
-int get_next_line(const int fd, char **line);
-
-#endif
+int		ft_toupper(int c)
+{
+	if (ft_isalpha(c))
+	{
+		if (c >= 65 && c <= 90)
+			return (c);
+		else
+			return (c - 32);
+	}
+	else
+		return (c);
+}

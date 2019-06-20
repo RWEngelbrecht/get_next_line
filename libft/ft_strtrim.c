@@ -1,22 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rengelbr <rengelbr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/06/10 16:05:56 by rengelbr          #+#    #+#             */
-/*   Updated: 2019/06/17 13:49:33 by rengelbr         ###   ########.fr       */
+/*   Created: 2019/05/27 09:53:14 by rengelbr          #+#    #+#             */
+/*   Updated: 2019/06/10 13:04:11 by rengelbr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# define BUFF_SIZE 10
+#include "libft.h"
 
-# include <unistd.h>
-# include "libft/libft.h"
+char	*ft_strtrim(char const *s)
+{
+	char	*trimd;
+	int		i;
+	int		j;
 
-int get_next_line(const int fd, char **line);
-
-#endif
+	i = 0;
+	if (!s)
+		return (NULL);
+	j = ft_strlen(s) - 1;
+	while (s[i] == ' ' || (s[i] >= '\t' && s[i] <= '\r'))
+	{
+		i++;
+		if (s[i] == '\0')
+			return (ft_strdup(""));
+	}
+	while (s[j] == ' ' || (s[j] >= '\t' && s[j] <= '\r'))
+		j--;
+	trimd = ft_strsub(s, i, (j - i) + 1);
+	return (trimd);
+}

@@ -1,22 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rengelbr <rengelbr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/06/10 16:05:56 by rengelbr          #+#    #+#             */
-/*   Updated: 2019/06/17 13:49:33 by rengelbr         ###   ########.fr       */
+/*   Created: 2019/05/28 14:45:38 by rengelbr          #+#    #+#             */
+/*   Updated: 2019/06/03 13:33:04 by rengelbr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# define BUFF_SIZE 10
+#include "libft.h"
 
-# include <unistd.h>
-# include "libft/libft.h"
+void	*ft_memmove(void *dst, const void *src, size_t len)
+{
+	size_t			i;
+	unsigned char	*s;
+	unsigned char	*d;
 
-int get_next_line(const int fd, char **line);
-
-#endif
+	i = 0;
+	d = (unsigned char *)dst;
+	s = (unsigned char *)src;
+	if (dst == NULL && src == NULL && !(len <= 0))
+		return (NULL);
+	if (d > s)
+	{
+		while ((int)(--len) >= 0)
+			d[len] = s[len];
+	}
+	else
+	{
+		while (i < len)
+		{
+			d[i] = s[i];
+			i++;
+		}
+	}
+	return (dst);
+}
