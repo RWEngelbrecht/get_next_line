@@ -6,12 +6,12 @@
 /*   By: rengelbr <rengelbr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 16:00:43 by rengelbr          #+#    #+#             */
-/*   Updated: 2019/06/17 13:48:42 by rengelbr         ###   ########.fr       */
+/*   Updated: 2019/06/27 10:39:19 by rengelbr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
+#include <stdio.h>
 int	new_line(char **str, char **line, int fd, int res)
 {
 	char	*temp;
@@ -64,4 +64,24 @@ int	get_next_line(const int fd, char **line)
 	else if (res == 0 && (str[fd] == NULL || str[fd][0] == '\0'))
 		return (0);
 	return (new_line(str, line, fd, res));
+}
+
+int main()
+{
+	int res;
+	char *line;
+	int fd;
+
+/*
+** 	if (argc != 2)
+** 		return (1);
+*/
+	res = 0;
+	fd = open("text.txt", O_RDWR);
+	printf("%d\n", fd);
+	write(fd, "this is a line\n", 15);
+	res = get_next_line(fd, &line);
+	printf("%d\n", res);
+
+	return (0);
 }

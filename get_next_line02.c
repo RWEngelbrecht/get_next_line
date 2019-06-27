@@ -6,12 +6,12 @@
 /*   By: rengelbr <rengelbr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/19 09:49:15 by rengelbr          #+#    #+#             */
-/*   Updated: 2019/06/26 13:37:30 by rengelbr         ###   ########.fr       */
+/*   Updated: 2019/06/27 10:11:04 by rengelbr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
+#include <stdio.h>
 static int	verify_line(char **buffer, char **line)
 {
 	char *tmp_buf;
@@ -50,7 +50,10 @@ static int	read_file(int fd, char *heap, char **buffer, char **line)
 		if (verify_line(buffer, line))
 			break ;
 	}
-	return
+	if (red > 0)
+		return (1);
+	else
+		return (red);
 }
 
 int	get_next_line(const int fd, char **line)
@@ -61,9 +64,9 @@ int	get_next_line(const int fd, char **line)
 	char			*heap;
 
 	if (fd < 0 || line == NULL || read(fd, buf, 0) < 0
-		|| !(heap = (char**)malloc(sizeof(*arr) * BUFF_SIZE + 1))
+		|| !(heap = (char*)malloc(sizeof(char) * BUFF_SIZE + 1)))
 		return (-1);
-	if (buf[fd])   //???????????
+	if (buf[fd])
 		if (verify_line(&buf[fd], line))
 			return (1);
 	i = 0;
@@ -77,18 +80,25 @@ int	get_next_line(const int fd, char **line)
 			*line = NULL;
 		return (red);
 	}
-	*line = stack[fd];
-	stack[fd] = NULL;
+	*line = buf[fd];
+	buf[fd] = NULL;
 	return (1);
+
 }
-/*
-** int main()
-** {
-** 	int res;
-**
-** 	res = 0;
-** 	fd = open("test.txt", O_RDONLY | O_CREAT);
-** 	write(fd, "this is a line\n", 15);
-** 	res = get_next_line02(fd, )
-** }
-*/
+
+int main(int argc, char *argv[])
+{
+	int res;
+	char **line = NULL;
+	int fd;
+
+	if (argc != 2)
+		return (1);
+	res = 0;
+	fd = open(argv[1], O_RDWR | O_CREAT);
+	write(fd, "this is a line\n", 15);
+	res = get_next_line(fd, line);
+	printf("%d\n", res);
+
+	return (0);
+}
