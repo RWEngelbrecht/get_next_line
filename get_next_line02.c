@@ -6,17 +6,20 @@
 /*   By: rengelbr <rengelbr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/19 09:49:15 by rengelbr          #+#    #+#             */
-/*   Updated: 2019/06/27 10:11:04 by rengelbr         ###   ########.fr       */
+/*   Updated: 2019/06/28 13:37:34 by rengelbr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
+/*
+** #include <stdio.h>
+** #include <fcntl.h>
+*/
 static int	verify_line(char **buffer, char **line)
 {
-	char *tmp_buf;
-	char *schr;
-	int i;
+	char	*tmp_buf;
+	char	*schr;
+	int		i;
 
 	i = 0;
 	schr = *buffer;
@@ -32,8 +35,8 @@ static int	verify_line(char **buffer, char **line)
 
 static int	read_file(int fd, char *heap, char **buffer, char **line)
 {
-	int red;
-	char *tmp_buf;
+	int		red;
+	char	*tmp_buf;
 
 	while ((red = read(fd, heap, BUFF_SIZE)) > 0)
 	{
@@ -56,9 +59,9 @@ static int	read_file(int fd, char *heap, char **buffer, char **line)
 		return (red);
 }
 
-int	get_next_line(const int fd, char **line)
+int			get_next_line(const int fd, char **line)
 {
-	static char			*buf[BUFF_SIZE + 1];
+	static char		*buf[BUFF_SIZE + 1];
 	int				red;
 	int				i;
 	char			*heap;
@@ -86,19 +89,47 @@ int	get_next_line(const int fd, char **line)
 
 }
 
-int main(int argc, char *argv[])
-{
-	int res;
-	char **line = NULL;
-	int fd;
-
-	if (argc != 2)
-		return (1);
-	res = 0;
-	fd = open(argv[1], O_RDWR | O_CREAT);
-	write(fd, "this is a line\n", 15);
-	res = get_next_line(fd, line);
-	printf("%d\n", res);
-
-	return (0);
-}
+/*
+** int main(int argc, char *argv[])
+** {
+** 	int res;
+** 	char *line;
+** 	int fd;
+** 	char file[250] = "this is a line\nthis is another line\nzomg, another line\n a l1n3 w1t4 numb3r5";
+** 	if (argc < 2)
+** 		return (-1);
+** 	res = 0;
+** 	fd = open(argv[1], O_RDONLY);
+** 	printf("fd: 		| %d |\n", fd);
+** 	printf("fd: 		| %d |\n", fd);
+** 	res = get_next_line(fd, &line);
+** 	printf("gnl ret: 	| %d |\n", res);
+** 	printf("lines read:	| %s |\n", line);
+** 	close(fd);
+** 	free(line);
+** 	line = NULL;
+** 	fd = open("texting.txt", O_RDONLY);
+** 	printf("fd: 		| %d |\n", fd);
+** 	res = get_next_line(fd, &line);
+** 	printf("gnl ret:	| %d |\n", res);
+** 	printf("lines read:	| %s |\n", line);
+**
+** 	while ((res = get_next_line(fd, &line)) != -1)
+** 	{
+** 		printf("%d\n", res);
+** 		if (res == 0)
+** 		{
+** 			printf("%s\n", "EOF reached\n");
+** 			fd = open("texting.txt", O_RDONLY);
+** 			printf("fd: 		| %d |\n", fd);
+** 			res = get_next_line(fd, &line);
+** 			printf("gnl ret:	| %d |\n", res);
+** 			printf("lines read:	| %s |\n", line);
+** 			return (0);
+** 		}
+** 		printf("lines read: | %s |\n", line);
+** 	}
+**
+** 	return (0);
+** }
+*/

@@ -18,7 +18,7 @@ static int		ft_countchars(int n)
 
 	cnt = 0;
 	if (n == 0)
-		cnt++;
+		return (cnt);
 	else if (n < 0)
 	{
 		cnt++;
