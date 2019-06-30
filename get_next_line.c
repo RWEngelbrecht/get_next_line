@@ -6,82 +6,64 @@
 /*   By: rengelbr <rengelbr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 16:00:43 by rengelbr          #+#    #+#             */
-/*   Updated: 2019/06/27 10:39:19 by rengelbr         ###   ########.fr       */
+/*   Updated: 2019/06/30 12:59:27 by rengelbr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
-int	new_line(char **str, char **line, int fd, int res)
+
+static int	new_line(char **s, char **line, int fd, int res)
 {
 	char	*temp;
 	int		len;
 
 	len = 0;
-	while (str[fd][len] != '\n' && str[fd][len] != '\0')
+	while (s[fd][len] != '\n' && s[fd][len] != '\0')
 		len++;
-	if (str[fd][len] == '\n')
+	if (s[fd][len] == '\n')
 	{
-		*line = ft_strsub(str[fd], 0, len);
-		temp = ft_strdup(str[fd] + (len + 1));
-		free(str[fd]);
-		str[fd] = temp;
-		if (str[fd][0] == '\0')
-			ft_strdel(&str[fd]);
+		*line = ft_strsub(s[fd], 0, len);
+		temp = ft_strdup(s[fd] + (len + 1));
+		free(s[fd]);
+		s[fd] = temp;
+		if (s[fd][0] == '\0')
+			ft_strdel(&s[fd]);
 	}
-	else if (str[fd][len] == '\0')
+	else if (s[fd][len] == '\0')
 	{
 		if (res == BUFF_SIZE)
 			return (get_next_line(fd, line));
-		*line = ft_strdup(str[fd]);
-		ft_strdel(&str[fd]);
+		*line = ft_strdup(s[fd]);
+		ft_strdel(&s[fd]);
 	}
 	return (1);
 }
 
-int	get_next_line(const int fd, char **line)
+int			get_next_line(const int fd, char **line)
 {
 	char			buf[BUFF_SIZE + 1];
-	int				res;
-	static char		*str[255];
+	static char		*s[255];
 	char			*tmp;
+	int				res;
 
 	if (fd < 0 || !line || read(fd, buf, 0) < 0)
 		return (-1);
 	while ((res = read(fd, buf, BUFF_SIZE)) > 0)
 	{
 		buf[res] = '\0';
-		if (str[fd] == NULL)
-			str[fd] = ft_strnew(1);
-		tmp = ft_strjoin(str[fd], buf);
-		free(str[fd]);
-		str[fd] = tmp;
+		if (s[fd] == NULL)
+			s[fd] = ft_strdup(buf);
+		else
+		{
+			tmp = ft_strjoin(s[fd], buf);
+			free(s[fd]);
+			s[fd] = tmp;
+		}
 		if (ft_strchr(buf, '\n'))
 			break ;
 	}
 	if (res < 0)
 		return (-1);
-	else if (res == 0 && (str[fd] == NULL || str[fd][0] == '\0'))
-		return (0);
-	return (new_line(str, line, fd, res));
-}
-
-int main()
-{
-	int res;
-	char *line;
-	int fd;
-
-/*
-** 	if (argc != 2)
-** 		return (1);
-*/
-	res = 0;
-	fd = open("text.txt", O_RDWR);
-	printf("%d\n", fd);
-	write(fd, "this is a line\n", 15);
-	res = get_next_line(fd, &line);
-	printf("%d\n", res);
-
-	return (0);
+	else
+		return (res == 0 && (s[fd] == NULL) ? 0 : new_line(s, line, fd, res));
 }
