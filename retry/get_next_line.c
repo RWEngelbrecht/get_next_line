@@ -6,13 +6,13 @@
 /*   By: rengelbr <rengelbr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/10 16:00:43 by rengelbr          #+#    #+#             */
-/*   Updated: 2019/06/30 12:59:27 by rengelbr         ###   ########.fr       */
+/*   Updated: 2019/07/01 12:11:20 by rengelbr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static int	new_line(char **s, char **line, int fd, int res)
+static int	new_line(char **s, char **line, int fd)
 {
 	char	*temp;
 	int		len;
@@ -23,16 +23,14 @@ static int	new_line(char **s, char **line, int fd, int res)
 	if (s[fd][len] == '\n')
 	{
 		*line = ft_strsub(s[fd], 0, len);
-		temp = ft_strdup(s[fd] + (len + 1));
+		temp = ft_strdup(s[fd] + len + 1);
 		free(s[fd]);
 		s[fd] = temp;
 		if (s[fd][0] == '\0')
 			ft_strdel(&s[fd]);
 	}
-	else if (s[fd][len] == '\0')
+	else
 	{
-		if (res == BUFF_SIZE)
-			return (get_next_line(fd, line));
 		*line = ft_strdup(s[fd]);
 		ft_strdel(&s[fd]);
 	}
@@ -46,7 +44,7 @@ int			get_next_line(const int fd, char **line)
 	char			*tmp;
 	int				res;
 
-	if (fd < 0 || !line || read(fd, buf, 0) < 0)
+	if (fd < 0 || line == NULL)
 		return (-1);
 	while ((res = read(fd, buf, BUFF_SIZE)) > 0)
 	{
@@ -59,11 +57,11 @@ int			get_next_line(const int fd, char **line)
 			free(s[fd]);
 			s[fd] = tmp;
 		}
-		if (ft_strchr(buf, '\n'))
+		if (ft_strchr(s[fd], '\n'))
 			break ;
 	}
 	if (res < 0)
 		return (-1);
 	else
-		return (res == 0 && (s[fd] == NULL) ? 0 : new_line(s, line, fd, res));
+		return ((res == 0 && s[fd] == NULL) ? 0 : new_line(s, line, fd));
 }
